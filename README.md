@@ -18,6 +18,7 @@ In order to use this software, simply run:
 ```
 This will launch a Flask API server that answers to requests. In order to view the API readme, follow this link[LINK]. If you want to view the UI and access the API this way, then navigate to http://localhost:5000/static/submit.html. To use the UI, you have to fill in the forms:
 
+|---------------------------------|-------------------------------------------|
 | Baseline URL                    | URL of the baseline instance              |
 | Updated URL                     | URL of the updated instance               |
 | Max depth                       | Max depth to crawl links in the two pages |
