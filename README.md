@@ -47,7 +47,8 @@ In order to use the tool programatically, read the following link [LINK] contain
 ## Results
 The results that are gathered after each job is done are the following:
 * Screenshots of every endpoint that has been crawled from both instances - `./tmp/{prefix}_baseline/{endpoint_number}.png` and `./tmp/{prefix}_updated/{endpoint_number}.png`, where the name corresponds the endpoint in the JSON report
-* Predicted segmentation masks for each of the components specified above - `./tmp/{prefix}_baseline/{component}){endpoint_number}.png` and `./tmp/{prefix}_baseline/{component}){endpoint_number}.png`
+* Predicted segmentation masks for each of the components specified above - `./tmp/{prefix}_baseline/{component}_{endpoint_number}.png` and `./tmp/{prefix}_baseline/{component}_{endpoint_number}.png`
+* Saved Javascript and Network messages - `./tmp/{prefix}_baseline/{endpoint_number}_js_log.json` and `./tmp/{prefix}_baseline/{endpoint_number}_network_log.json` and for updated instance respectively
 * A JSON report containing calculated scores
 
 ### Scores
