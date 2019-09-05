@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/results.css">
+    <title>FRED</title>
+</head>
+<body>
+<!-- Just an image -->
+<nav class="navbar navbar-expand-sm navbar-light bg-light shadow">
+    <a class="navbar-brand" href="#">
+        <img src="images/adobe_small.png" class="img-responsive">
+    </a>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="/static/submit.html">Submit<span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="/static/jobs.html">Jobs</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid pt-5">
+    <div class="row">
+
+
+        <div class="col col-lg-2" id="endpoints_btns">
+            <div class="row pb-1">
+                <div class="col-lg-12" id="overall_progress_mask">
+
+                </div>
+            </div>
+            <div class="row pb-1">
+                <div class="col-lg-12" id="overall_progress_pixel">
+
+                </div>
+            </div>
+
+            <div class="row pb-5">
+                <div id="table" class="col-lg-12">
+                </div>
+            </div>
+            <div data-toggle="buttons" id="choose_mask_btns">
+                <div class="row pb-1">
+                    <div class="btn-group btn-group-sm btn-group-toggle col-lg-12">
+                        <label class="btn btn-secondary active" id="images_msk">
+                            <input type="radio" name="options" autocomplete="off"> Images
+                        </label>
+                        <label class="btn btn-secondary" id="sections_msk">
+                            <input type="radio" name="options" autocomplete="off"> Sections
+                        </label>
+                        <label class="btn btn-secondary" id="textblocks_msk">
+                            <input type="radio" name="options" autocomplete="off"> Textblocks
+                        </label>
+
+                    </div>
+                </div>
+                <div class="row pb-5">
+                    <div class="btn-group btn-group-sm btn-group-toggle col-lg-12">
+                        <label class="btn btn-secondary" id="forms_msk">
+                            <input type="radio" name="options" autocomplete="off"> Forms
+                        </label>
+                        <label class="btn btn-secondary" id="buttons_msk">
+                            <input type="radio" name="options" autocomplete="off"> Buttons
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div id="buttons" class="col-lg-12">
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-10" id="show_report">
+
+            <div class="row">
+                <div class="col-sm" id="images_cocoen">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="alert alert-danger d-none" role="alert" id="wrong_id_alert">
+                ID does not exist.
+            </div>
+        </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="js/results.js"></script>
+
+</body>
+</html>
