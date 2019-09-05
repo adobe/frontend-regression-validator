@@ -38,6 +38,7 @@ If you want to view the UI and access the API this way, then navigate to http://
 | Baseline URL password(optional) | Password for the baseline instance        |
 | Updated URL username(optional)  | Username for the updated instance         |
 | Updated URL password(optional)  | Password for the updated instance         |
+
 This will launch a job with an ID. If you navigate to http://localhost:5000/static/jobs.html, you can see the status of the launched job i.e. Done, Failed, In progress. After the job ends, the `View Results` button will become available and you can click it in order to view the results. To interpret the results, see below.
 
 ### API usage
