@@ -52,11 +52,6 @@ This will launch a job with an ID. If you navigate to http://localhost:5000/stat
 ### API usage
 In order to use the tool programatically, read the following link https://github.com/adobe/frontend-regression-validator/blob/master/fred/README.md containing the description of the API.
 
-## Examples
-![Text](examples/images/textblocks_example.png)
-![Sections](examples/images/sections_example.png)
-The website used as an example is https://opensource.adobe.com/NLP-Cube/index.html. We used the same link as both baseline and updated versions due to lack of an example website containing differences. You can see that it segments the components and it delivers the scores on the left. Both scores are 0 since there is no difference in layout, content or network messages. In the top left, you can see the overall score which is also 0 for the same reasons.
-
 ## Results
 The results that are gathered after each job is done are the following:
 * Screenshots of every endpoint that has been crawled from both instances - `./tmp/{prefix}_baseline/{endpoint_number}.png` and `./tmp/{prefix}_updated/{endpoint_number}.png`, where the name corresponds the endpoint in the JSON report
@@ -71,3 +66,8 @@ The tool reports 2 different scores:
 Both of them are reported per component, but they also contain an average called `overall`, which in the UI is shown in the progress bars on the left.
 There are also the network stats and javascript stats scores. These are calculated by taking all the messages that the webpage produces on load and calculating the fraction that is common between both the baseline and the updated instance.
 The general risk score is calculated as `max(max(all ui_stats risk scores), max(all network and js stats risk scores))`. The general JS and network stats are the sum of all the JS and network stats in each endpoint. It also reports the mean and the stddev of the above.
+
+## Examples
+![Text](examples/images/textblocks_example.png)
+![Sections](examples/images/sections_example.png)
+The website used as an example is https://opensource.adobe.com/NLP-Cube/index.html. We used the same link as both baseline and updated versions due to lack of an example website containing differences. You can see that it segments the components and it delivers the scores on the left. Both scores are 0 since there is no difference in layout, content or network messages. In the top left, you can see the overall score which is also 0 for the same reasons.
