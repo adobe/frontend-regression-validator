@@ -2,7 +2,6 @@
 .DS_Store
 chromedriver
 __pycache__/
-*.png
 *.json
 tmp/
 *.log

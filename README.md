@@ -16,14 +16,22 @@ More specifically, FRED will report differences regarding the following componen
 * Text
 
 ## Setup
+
+### Dependencies and how to run
+* Packages in requierments.txt - installed via pip
+* Java JDK for starting the proxy server that collects network stats
+* chromedriver - https://chromedriver.chromium.org/
+
 In order to use this software, simply run:
 ```
 git clone https://github.com/adobe/frontend-regression-validator.git
 pip install -r requirements.txt
 cd fred/
+export CHROMEDRIVER_PATH=/path/to/chromedriver
 python3 run.py
 ```
-This will launch a Flask API server that answers to requests. In order to view the API readme, follow this link[LINK].
+This will launch a Flask API server that answers to requests. In order to view the API readme, follow this link https://github.com/adobe/frontend-regression-validator/blob/master/fred/README.md.
+
 ### Web UI usage
 If you want to view the UI and access the API this way, then navigate to http://localhost:5000/static/submit.html. To use the UI, you have to fill in the forms:
 
@@ -42,7 +50,12 @@ If you want to view the UI and access the API this way, then navigate to http://
 This will launch a job with an ID. If you navigate to http://localhost:5000/static/jobs.html, you can see the status of the launched job i.e. Done, Failed, In progress. After the job ends, the `View Results` button will become available and you can click it in order to view the results. To interpret the results, see below.
 
 ### API usage
-In order to use the tool programatically, read the following link [LINK] containing the description of the API.
+In order to use the tool programatically, read the following link https://github.com/adobe/frontend-regression-validator/blob/master/fred/README.md containing the description of the API.
+
+## Examples
+![Text](examples/images/textblocks_example.png)
+![Sections](examples/images/sections_example.png)
+The website used as an example is https://opensource.adobe.com/NLP-Cube/index.html. We used the same link as both baseline and updated versions due to lack of an example website containing differences. You can see that it segments the components and it delivers the scores on the left. Both scores are 0 since there is no difference in layout, content or network messages. In the top left, you can see the overall score which is also 0 for the same reasons.
 
 ## Results
 The results that are gathered after each job is done are the following:
