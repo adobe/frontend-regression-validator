@@ -3,7 +3,7 @@
 
 * **URL**
 
-  _/verify_
+  _/api/verify_
 
 * **Method:**
 
@@ -60,7 +60,7 @@
 
 * **URL**
 
-  _/verify_
+  _/api/verify_
 
 * **Method:**
 
@@ -102,7 +102,45 @@
   `
     $.ajax({
         type: "GET",
-        url: "/api/verify?id=12345",
+        url: "/api/verify?id=12345"
     });
   `
 
+**ID List**
+----
+
+* **URL**
+
+  _/api/ids_
+
+* **Method:**
+
+  `GET`
+
+* **Success Response:**
+  
+  * **Code:** 200 <br />
+    **Content:** `"id1": {'baseline_url': "http://www.test.com", 
+                   'updated_url': "http://www.test.com", 
+                   'status': 'Starting',
+                   'started_at': get_time(), 
+                   'stopped_at': 'None', 
+                   'prefix': prefix, 
+                   'max_depth': "1",
+                   'max_urls': "100"}, 
+                   id2": {'baseline_url': "http://www.test.com", 
+                   'updated_url': "http://www.test.com", 
+                   'status': 'Starting',
+                   'started_at': get_time(), 
+                   'stopped_at': 'None', 
+                   'prefix': prefix, 
+                   'max_depth': "1",
+                   'max_urls': "100"}, `
+
+* **Sample Call:**
+  `
+    $.ajax({
+        type: "GET",
+        url: "/api/ids"
+    });
+  `
