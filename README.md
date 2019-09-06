@@ -27,6 +27,10 @@ In order to use this software, simply run:
 git clone https://github.com/adobe/frontend-regression-validator.git
 pip install -r requirements.txt
 cd fred/
+cd inference/
+cat model_files.bz2.parta* > model_files.bz2
+tar xjf model_files.bz2
+cd ..
 export CHROMEDRIVER_PATH=/path/to/chromedriver
 python3 run.py
 ```
