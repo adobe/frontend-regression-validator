@@ -20,9 +20,9 @@ More specifically, FRED will report differences regarding the following componen
 ### Dependencies and how to run
 * Packages in requierments.txt - installed via pip
 
-* Java JDK for starting the proxy server that collects network stats - https://www.oracle.com/technetwork/java/javase/downloads/
+* [Java JDK] for starting the proxy server that collects network stats (https://www.oracle.com/technetwork/java/javase/downloads/)
 
-* chromedriver - https://chromedriver.chromium.org/ (use same release version as chrome)
+* [chromedriver] (https://chromedriver.chromium.org) (use same release version as chrome)
 
 In order to use this software, simply run:
 ```
