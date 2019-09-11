@@ -1,8 +1,8 @@
 import os
-from corpus.masker import MaskGenerator
-from corpus.datapreprocess import DataPreprocessor
-from corpus.serialize_photos import Serializer
-from corpus.concat_channels import Concatenator
+from masker import MaskGenerator
+from datapreprocess import DataPreprocessor
+from serialize_photos import Serializer
+from concat_channels import Concatenator
 import shutil
 from PIL import Image
 import numpy as np
@@ -77,6 +77,9 @@ def make_corpus(scraped_websites_dir, class_dirs):
     for c in class_dirs:
         dp = DataPreprocessor(os.path.join('./dataset/', c), 512, 512, 32)
         dp.preprocess()
+
+    dp = DataPreprocessor(os.path.join('./dataset/', 'images'), 512, 512, 32)
+    dp.preprocess()
 
     # Save .png images as .npy
     serializer = Serializer('./dataset/images', 'I')
