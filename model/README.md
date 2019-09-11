@@ -1,5 +1,11 @@
 # Models
 
+## Dataset
+Our network takes as input a 3 channel black-and-white image(each channel is repeated) and it gives as output a 5-channel image containing on each channel the mask for each of the website primitive. To finish building the dataset, follow these steps AFTER running the crawler from the `corpus` directory:
+* `cd corpus`
+* `python3 make_corpus.py --scraped-websites-dir /path/to/scraped/websites --class-dirs list-with-scraped-primitive-names`
+After this, the dataset is ready.
+
 ## Architectures
 In our experiments, we have tried models based on the encoder-decoder architecture, that contain a downsampling and an upsampling path. Currently, in the UI code, we are using `frednetv2`, but you can go ahead and change it to see the results we have achieved with the others.
 
