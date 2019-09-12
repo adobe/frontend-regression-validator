@@ -20,6 +20,9 @@ $(function(){
    success: function(response) {
      global_response = response;
      $.each(response, function(i, item){
+       if(i == "risk_score"){
+        return false;
+       }
        var $x = "";
        var $overall_mask_div = parseFloat(item.ui_stats.mask_div.overall);
        var $overall_pixel_div = parseFloat(item.ui_stats.pixelwise_div.overall);
