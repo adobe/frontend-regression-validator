@@ -17,7 +17,8 @@ More specifically, FRED will report differences regarding the following componen
 ### Quickstart Docker
 If you just want to clone and run the software, we have provided a Dockerfile. To run it:
 ```
-cd docker
+git clone https://github.com/adobe/frontend-regression-validator.git
+cd frontend-regression-validator/docker
 docker build -t fred .
 docker run -p 5000:5000 fred
 ```
