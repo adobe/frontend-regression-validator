@@ -1,8 +1,7 @@
 # Frontend-Regression-Validator(FRED)
 
-FRED is an opensource visual regression tool used to compare two instances of a website. FRED is responsible for automatic visual regression testing, with the purpose of ensuring that functionality is not broken on instances that are being upgraded. The main idea is that detecting breaking changes can be achieved through visual comparison of screenshots between a baseline and an upgraded instance of a website.
-Using visual regression is a good idea for the “Zero Cost Upgrade” process. Mainly we are only updating/upgrading the underlying framework and we are not pushing any changes to the custom code or content. Thus, FRED expects both instances (the baseline and the upgraded one) to be visually identical.
-However, this is not always the case and we draw the attention to dynamic content, which stands for content that can change based on random variables, timers etc. We include here random newsfeeds, commercials and custom designed image-based effects e.g. a carrousel that randomly choses the first image) and many others.
+FRED is an opensource visual regression tool used to compare two instances of a website. FRED is responsible for automatic visual regression testing, with the purpose of ensuring that functionality is not broken by comparing the previous and current version of a website. 
+FRED treats layout and content changes independently by applying image segmentation Machine Learning techniques to recognize high-level visual structures such as buttons, images, forms, tables etc. This reduces the impact of dynamic content yielding false positives.
 
 Use FRED if you need:
 * Screenshot comparision
