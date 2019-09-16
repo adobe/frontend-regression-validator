@@ -37,6 +37,14 @@ python3 run.py
 ```
 This will launch a Flask API server that answers to requests. In order to view the API readme, follow this link https://github.com/adobe/frontend-regression-validator/blob/master/fred/README.md.
 
+### Quickstart Docker
+If you just want to clone and run the software, we have provided a Dockerfile. To run it:
+```
+cd docker
+docker build -t fred .
+docker run -p 5000:5000 fred
+```
+
 ### Web UI usage
 If you want to view the UI and access the API this way, then navigate to http://localhost:5000/static/submit.html. To use the UI, you have to fill in the forms:
 

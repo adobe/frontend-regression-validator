@@ -33,5 +33,8 @@ ENV CHROMEDRIVER_PATH=/work/chromedriver
 # Preparing Python build environment
 RUN pip3 install -r /work/frontend-regression-validator/requirements.txt
 
+# Extract the model files
+RUN cd /work/frontend-regression-validator/fred/inference && cat model_files.bz2.parta* > model_files.bz2 && tar xjf model_files.bz2
+
 # Start notebook
 CMD cd /work/frontend-regression-validator/fred && python3 run.py
