@@ -11,8 +11,7 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-# Prepare cube
-
+# Prepare fred
 RUN mkdir /work && \
     cd /work && \
     git clone https://github.com/adobe/frontend-regression-validator.git
