@@ -38,6 +38,8 @@ def get_recursive_urls(parent_url, max_depth, max_urls):
     options = webdriver.ChromeOptions()
     options.add_argument("--disable-infobars")
     options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
     driver = webdriver.Chrome(driver_path, chrome_options=options)
     try:
         driver.get(parent_url)

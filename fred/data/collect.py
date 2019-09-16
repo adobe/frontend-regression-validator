@@ -54,7 +54,8 @@ def collect_data(url, output_folder, output_filename):
     options.add_argument("--disable-infobars")
     options.add_argument("--headless")
     options.add_argument('--proxy-server=%s' % proxy.proxy)
-
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
     capabilities = DesiredCapabilities.CHROME
     capabilities['goog:loggingPrefs'] = {'browser': 'ALL'}
 
