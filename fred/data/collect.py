@@ -4,8 +4,7 @@ from selenium.webdriver import DesiredCapabilities
 import time
 import json
 import base64
-from browsermobproxy import Server
-from pprint import pprint
+from run import proxy
 
 SCRIPT = """var body = document.body,
             html = document.documentElement;
@@ -45,9 +44,7 @@ def collect_data(url, output_folder, output_filename):
     output_folder = os.path.join("./tmp", output_folder)
     if not os.path.exists(output_folder):
         os.mkdir(output_folder)
-    server = Server("utils/browsermob_proxy/bin/browsermob-proxy", options={'port': 8090})
-    server.start()
-    proxy = server.create_proxy()
+
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
     options.add_argument("--force-device-scale-factor=2")
@@ -81,4 +78,3 @@ def collect_data(url, output_folder, output_filename):
         f.write(png)
     driver.execute_script("window.scrollTo(0, 0)")
     driver.close()
-    server.stop()

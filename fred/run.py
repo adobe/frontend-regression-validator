@@ -8,6 +8,7 @@ from endpoints.verify import states, id_to_urls
 from endpoints.get_result import Result
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, request, send_from_directory
+from browsermobproxy import Server
 
 
 def clear_ended():
@@ -32,16 +33,16 @@ if app.config["DEBUG"]:
         response.headers["Expires"] = 0
         response.headers["Pragma"] = "no-cache"
         return response
-
+server = Server("utils/browsermob_proxy/bin/browsermob-proxy", options={'port': 8090})
+server.start()
+proxy = server.create_proxy()
 cors = CORS(app, resources={r"*": {"origins": "*"}})
 api = Api(app)
 api.add_resource(Verify, "/api/verify")
 api.add_resource(IDList, "/api/ids")
 api.add_resource(Shutdown, "/api/shutdown")
 api.add_resource(Result, "/api/result")
-# scheduler = BackgroundScheduler()
-# scheduler.add_job(func=clear_ended, trigger='interval', seconds=300)
-# scheduler.start()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
+    server.stop()
