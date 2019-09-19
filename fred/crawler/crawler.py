@@ -1,16 +1,33 @@
 from urllib.parse import urlparse
-from selenium import webdriver
 from bs4 import BeautifulSoup
-from selenium.common.exceptions import InvalidArgumentException
-import os
 from utils.utils import eprint
+from pyppeteer import launch
+import asyncio
 
 
-def _recursive_get_urls(crawled_urls, driver, max_urls, parent_url, domain, depth=0):
+class MyPage(object):
+    def __init__(self):
+        self.source = None
+
+    def set(self, source):
+        self.source = source
+
+
+async def get_page(test_page, url):
+    browser = await launch()
+    page = await browser.newPage()
+    await page.goto(url)
+    out = await page.content()
+    test_page.set(out)
+    await browser.close()
+
+
+def _recursive_get_urls(crawled_urls, test_page, max_urls, parent_url, domain, depth=0):
     if depth == 0 or len(crawled_urls) == max_urls:
         return crawled_urls
-    driver.get(parent_url)
-    html = driver.page_source.encode('utf-8')
+    asyncio.get_event_loop().run_until_complete(get_page(test_page, parent_url))
+
+    html = test_page.source
     soup = BeautifulSoup(html, features='html.parser')
 
     urls = soup.findAll('a')
@@ -23,31 +40,15 @@ def _recursive_get_urls(crawled_urls, driver, max_urls, parent_url, domain, dept
         if urlparse(url).netloc == domain and url not in crawled_urls:
             if len(crawled_urls) <= max_urls:
                 crawled_urls.append(url)
-                print('[LOG] Added: {}'.format(url))
-                _recursive_get_urls(crawled_urls, driver, max_urls, url, domain, depth - 1)
+                eprint('[LOG] Added: {}'.format(url))
+                _recursive_get_urls(crawled_urls, max_urls, url, domain, depth - 1)
 
 
 def get_recursive_urls(parent_url, max_depth, max_urls):
     scraped_urls = [parent_url]
     domain = urlparse(parent_url).netloc
-    if not 'CHROMEDRIVER_PATH' in os.environ:
-        eprint('[ERR] CHROMEDRIVER_PATH not provided in env variables')
-        exit(5)
-    driver_path = os.environ['CHROMEDRIVER_PATH']
-    assert os.path.exists(driver_path), 'No such file {}'.format(driver_path)
-    options = webdriver.ChromeOptions()
-    options.add_argument("--disable-infobars")
-    options.add_argument("--headless")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    driver = webdriver.Chrome(driver_path, chrome_options=options)
-    try:
-        driver.get(parent_url)
-    except InvalidArgumentException:
-        eprint('[ERR] Invalid website')
-        driver.close()
-        exit(1)
-    _recursive_get_urls(scraped_urls, driver, max_urls, parent_url, domain, depth=max_depth)
+    page = MyPage()
+    asyncio.get_event_loop().run_until_complete(get_page(page, parent_url))
+    _recursive_get_urls(scraped_urls, page, max_urls, parent_url, domain, depth=max_depth)
     eprint('[LOG] Finished crawling URLs for {}'.format(parent_url))
-    driver.close()
     return scraped_urls

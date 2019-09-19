@@ -1,4 +1,3 @@
-selenium==3.141.0
 torchsummary==1.5.1
 torchvision==0.4.0
 APScheduler==3.6.1
@@ -10,3 +9,4 @@ numpy==1.17.1
 Pillow==6.1.0
 browsermob_proxy==0.8.0
 beautifulsoup4==4.8.0
+pyppeteer==0.0.25
