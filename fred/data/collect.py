@@ -8,16 +8,11 @@ javascript = []
 
 
 async def intercept_network_response(response):
-    print("URL:", response.url)
-    print(response.status)
     network.append(str(response.status) + response.url)
-    print("\n\n")
 
 
 async def intercept_console(response):
-    print(response.text)
     javascript.append(response.text)
-    print("\n\n")
 
 
 async def collect_msgs_and_screenshot(url, ss_path):
@@ -44,7 +39,7 @@ def collect_data(url, output_folder, output_filename):
         os.mkdir(output_folder)
 
     asyncio.get_event_loop().run_until_complete(
-        collect_msgs_and_screenshot(url, os.path.join(output_folder, output_filename) + '.png'))
+        collect_msgs_and_screenshot(url, os.path.join(output_folder, output_filename)))
 
     with open(os.path.join(output_folder, output_filename.split('.')[0] + '_js_log.json'), 'w') as f:
         json.dump(javascript, f, indent=2)

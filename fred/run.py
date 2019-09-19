@@ -1,6 +1,3 @@
-from config.proxy import get_server, init
-
-from flask import Flask
 from flask_restful import Api
 from flask_cors import CORS
 from endpoints.verify import Verify
@@ -8,8 +5,7 @@ from endpoints.get_ids import IDList
 from endpoints.shutdown import Shutdown
 from endpoints.verify import states, id_to_urls
 from endpoints.get_result import Result
-from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask, request, send_from_directory
+from flask import send_from_directory
 import sys
 
 sys.path.append('../')
@@ -39,12 +35,9 @@ if __name__ == '__main__':
     cors = CORS(app, resources={r"*": {"origins": "*"}})
     # print(hex(id(app)))
     api = Api(app)
-    api.add_resource(Verify, "/api/verify", resource_class_kwargs={'app': app})
+    api.add_resource(Verify, "/api/verify")
     api.add_resource(IDList, "/api/ids")
     api.add_resource(Shutdown, "/api/shutdown")
     api.add_resource(Result, "/api/result")
-    init(app)
 
     app.run(host='0.0.0.0', debug=True)
-    server = get_server(app)
-    server.stop()
