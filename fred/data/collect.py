@@ -4,7 +4,7 @@ from selenium.webdriver import DesiredCapabilities
 import time
 import json
 import base64
-from run import proxy
+import requests
 
 SCRIPT = """var body = document.body,
             html = document.documentElement;
@@ -38,19 +38,18 @@ def _chrome_full_screenshot(driver):
     return base64.b64decode(screenshot['data'])
 
 
-def collect_data(url, output_folder, output_filename):
+def collect_data(url, output_folder, output_filename, proxy_host, proxy_port):
     if not os.path.exists("./tmp"):
         os.mkdir("./tmp")
     output_folder = os.path.join("./tmp", output_folder)
     if not os.path.exists(output_folder):
         os.mkdir(output_folder)
-
     options = webdriver.ChromeOptions()
     options.add_argument("--start-maximized")
     options.add_argument("--force-device-scale-factor=2")
     options.add_argument("--disable-infobars")
     options.add_argument("--headless")
-    options.add_argument('--proxy-server=%s' % proxy.proxy)
+    options.add_argument('--proxy-server=localhost:{}'.format(proxy_port))
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     capabilities = DesiredCapabilities.CHROME
@@ -60,14 +59,16 @@ def collect_data(url, output_folder, output_filename):
                               desired_capabilities=capabilities, service_args=["--verbose"])
     driver.maximize_window()
     driver.fullscreen_window()
-    proxy.new_har("Logs")
+    # proxy.new_har("Logs")
+    requests.put('%s/proxy/%s/har' % (proxy_host, proxy_port), {'initialPageTitle': 'Logs'})
     driver.get(url)
-
+    print(driver.get_log('browser'))
     logs = driver.get_log('browser')
     with open(os.path.join(output_folder, output_filename.split('.')[0] + '_js_log.json'), 'w') as f:
         json.dump(logs, f, indent=2)
     with open(os.path.join(output_folder, output_filename.split('.')[0] + '_network_log.json'), 'w') as f:
-        json.dump(proxy.har, f, indent=2)
+        r = requests.get('%s/proxy/%s/har' % (proxy_host, proxy_port))
+        json.dump(r.json(), f, indent=2)
 
     height = driver.execute_script(SCRIPT)
     for i in range(4):
