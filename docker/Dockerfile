@@ -16,22 +16,8 @@ RUN mkdir /work && \
     cd /work && \
     git clone https://github.com/adobe/frontend-regression-validator.git
 
-# Install chrome
-RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add && \
-    echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list && \
-    apt-get -y update && \
-    apt-get -y install google-chrome-stable
-
-# Get chromedriver
-RUN cd /work && wget https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip && \
-    unzip chromedriver_linux64.zip
-
-# Setup chromedriver as env variable
-ENV CHROMEDRIVER_PATH=/work/chromedriver
-
 # Preparing Python build environment
 RUN /opt/conda/bin/activate base && python3 -m pip install -r /work/frontend-regression-validator/requirements.txt
-#RUN conda install --file /work/frontend-regression-validator/requirements.txt
 
 # Extract the model files
 RUN cd /work/frontend-regression-validator/fred/inference && cat model_files.bz2.parta* > model_files.bz2 && tar xjf model_files.bz2
