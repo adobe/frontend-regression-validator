@@ -20,17 +20,14 @@ If you just want to clone and run the software, we have provided a Dockerfile. T
 git clone https://github.com/adobe/frontend-regression-validator.git
 cd frontend-regression-validator/docker
 docker build -t fred .
-docker run -p 5000:5000 fred
+docker run -p 5000:5000 -m 8g --memory-reservation=8g --oom-kill-disable=True --memory-swap 8G fred
 ```
+If you still encounter issues with out of memory errors, allocate more memory from the UI Docker app. Simply click the Docker icon in your toolbar, go to `Preferences`-`Advanced` and then pull the slider to around `8GB`.
 
 ## Setup
 
 ### Dependencies and how to run
 * Packages in requierments.txt - installed via pip
-
-* [Java JDK](https://www.oracle.com/technetwork/java/javase/downloads/) for starting the proxy server that collects network stats
-
-* [chromedriver](https://chromedriver.chromium.org) (use same release version as chrome)
 
 In order to use this software, simply run:
 ```
@@ -41,7 +38,6 @@ cd inference/
 cat model_files.bz2.parta* > model_files.bz2
 tar xjf model_files.bz2
 cd ..
-export CHROMEDRIVER_PATH=/path/to/chromedriver
 python3 run.py
 ```
 This will launch a Flask API server that answers to requests. In order to view the API readme, follow this link https://github.com/adobe/frontend-regression-validator/blob/master/fred/README.md.
