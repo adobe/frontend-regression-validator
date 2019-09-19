@@ -16,7 +16,7 @@ async def intercept_console(response):
 
 
 async def collect_msgs_and_screenshot(url, ss_path):
-    browser = await launch()
+    browser = await launch({'args': ['--disable-dev-shm-usage', '--no-sandbox']})
     page = await browser.newPage()
 
     page.on('response', intercept_network_response)

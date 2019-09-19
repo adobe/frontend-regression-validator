@@ -14,7 +14,7 @@ class MyPage(object):
 
 
 async def get_page(test_page, url):
-    browser = await launch()
+    browser = await launch({'args': ['--disable-dev-shm-usage', '--no-sandbox']})
     page = await browser.newPage()
     await page.goto(url)
     out = await page.content()

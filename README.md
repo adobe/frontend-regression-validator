@@ -19,7 +19,7 @@ If you just want to clone and run the software, we have provided a Dockerfile. T
 ```
 git clone https://github.com/adobe/frontend-regression-validator.git
 cd frontend-regression-validator/docker
-docker build -t fred .
+docker build --no-cache -t fred .
 docker run -p 5000:5000 -m 8g --memory-reservation=8g --oom-kill-disable=True --memory-swap 8G fred
 ```
 If you still encounter issues with out of memory errors, allocate more memory from the UI Docker app. Simply click the Docker icon in your toolbar, go to `Preferences`-`Advanced` and then pull the slider to around `8GB`.

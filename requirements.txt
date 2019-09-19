@@ -7,6 +7,5 @@ torch==1.2.0
 Flask_Cors==3.0.8
 numpy==1.17.1
 Pillow==6.1.0
-browsermob_proxy==0.8.0
 beautifulsoup4==4.8.0
 pyppeteer==0.0.25
