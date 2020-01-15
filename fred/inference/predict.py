@@ -47,18 +47,19 @@ def predict(image_file):
     model = NNet()
     model.load_state_dict(torch.load(model_path, map_location='cpu'))
     model.eval()
+    
+    with torch.no_grad():
+        pilim = Image.open(image_file).convert('L').convert('RGB')
+        pilim = preprocess_pilim(pilim)
+        input_array = prepare_for_input(pilim, flip_lr=False)
 
-    pilim = Image.open(image_file).convert('L').convert('RGB')
-    pilim = preprocess_pilim(pilim)
-    input_array = prepare_for_input(pilim, flip_lr=False)
+        lr_input_array = prepare_for_input(pilim, flip_lr=True)
+        try:
+            out_array = get_output(model(get_tensor(input_array)))
+        except:
+            exit(2)
 
-    lr_input_array = prepare_for_input(pilim, flip_lr=True)
-    try:
-        out_array = get_output(model(get_tensor(input_array)))
-    except:
-        exit(2)
-
-    lr_out_array = np.fliplr(get_output(model(get_tensor(lr_input_array))))
+        lr_out_array = np.fliplr(get_output(model(get_tensor(lr_input_array))))
 
     out_array = (out_array + lr_out_array) / 2
     out_array = threshold_output(out_array, 0.5)
