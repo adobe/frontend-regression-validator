@@ -1,33 +1,18 @@
-FROM pytorch/pytorch
+FROM python:3.7-slim-buster
+
+WORKDIR /fred
 
 # Installing build dependencies
-RUN apt-get update && apt-get install -y git curl unzip
+RUN apt-get update && apt-get install -y curl libnss3-dev libcups2-dev libasound2-dev libatk1.0-dev libatk-bridge2.0-dev libgtk-3-dev libpangocairo-1.0-0 python3-pip xorg && apt-get clean
 
-RUN apt-get install -y xorg
+COPY requirements.txt .
+RUN pip3 install -r requirements.txt
+RUN pyppeteer-install
 
-RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add && \
-    echo "deb [arch=amd64]  http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list && \
-    apt-get -y update && \
-    apt-get -y install google-chrome-stable
-
-# Prepare environment UTF-8
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales
-RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
-    locale-gen
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
-
-# Prepare fred
-RUN mkdir /work && \
-    cd /work && \
-    git clone https://github.com/adobe/frontend-regression-validator.git
-
-# Preparing Python build environment
-RUN /opt/conda/bin/activate base && python3 -m pip install -r /work/frontend-regression-validator/requirements.txt
+COPY fred/ .
 
 # Extract the model files
-RUN cd /work/frontend-regression-validator/fred/inference && cat model_files.bz2.parta* > model_files.bz2 && tar xjf model_files.bz2
+RUN cd inference && cat model_files.bz2.parta* > model_files.bz2 && tar xjf model_files.bz2 && rm -f model_files.bz2*
 
-# Start notebook
-CMD cd /work/frontend-regression-validator/fred && git pull && python3 run.py
+CMD python3 run.py
+EXPOSE 5000
