@@ -1,10 +1,136 @@
+import sys
+sys.path.append("..")
+from fred.globals import jobs, jobs_lock, STATUS_CODES
+
 from datetime import datetime
 from PIL import Image
 import numpy as np
 import os
-import sys
+import sys, json, logging
 from collections import defaultdict
+import collections
+from threading import Thread
 
+def get_list_of_files(dirName, ext=""):
+    listOfFile = os.listdir(dirName)
+    allFiles = list()
+    # Iterate over all the entries
+    for entry in listOfFile:
+        # Create full path
+        fullPath = os.path.join(dirName, entry)
+        # If entry is a directory then get the list of files in this directory
+        if os.path.isdir(fullPath):
+            allFiles = allFiles + get_list_of_files(fullPath, ext)
+        else:
+            allFiles.append(fullPath)
+
+    if ext != "":
+        allFiles = [x for x in allFiles if ext in x]
+
+    return allFiles
+
+
+def update_job_object (source, overrides):
+    """
+    This extends dict.update(new_dict) because the new_dict could have sub-dicts that will overwrite existing sub-dicts
+    in dict.
+    """
+    for key, value in overrides.items():
+        if isinstance(value, collections.Mapping) and value:
+            returned = update_job_object(source.get(key, {}), value)
+            source[key] = returned
+        else:
+            source[key] = overrides[key]
+    return source
+
+
+def update_job_log(jobs, job_id):
+    global jobs_lock
+    try:
+        if jobs is None:
+            logging.error("update_job_log was called with None jobs object. job_id = {}".format(job_id))
+    except Exception as e:
+        return
+
+    file = os.path.join("jobs", job_id, "log.json")
+    if os.path.exists(file):
+        jobs_lock.acquire()
+        js = json.load(open(file, "r", encoding="utf8"))
+        jobs_lock.release()
+        if js is not None:
+            js = update_job_object(js, jobs[job_id])
+            js_to_write = js
+        else:
+            js_to_write = jobs[job_id]
+    else:
+        js_to_write = jobs[job_id]
+    if js_to_write is not None:
+        # automatically perform overall score computation
+        if "report" in jobs[job_id]:
+            if "input_data" in jobs[job_id]:
+                if "network_divergence_weight" in jobs[job_id]["input_data"] and \
+                        "visual_divergence_weight" in jobs[job_id]["input_data"] and \
+                        "visual_divergence_ai_weight" in jobs[job_id]["input_data"]:
+                    wa = jobs[job_id]["input_data"]["network_divergence_weight"]
+                    wb = jobs[job_id]["input_data"]["visual_divergence_weight"]
+                    wc = jobs[job_id]["input_data"]["visual_divergence_ai_weight"]
+                    if "crawl_divergence" in jobs[job_id]["report"] and \
+                        "raw_screenshot_divergence" in jobs[job_id]["report"]:
+                        a = jobs[job_id]["report"]["crawl_divergence"]
+                        b = jobs[job_id]["report"]["raw_screenshot_divergence"]
+                        if jobs[job_id]["input_data"]["ml_enable"]:
+                            if "ml_screenshot_divergence" in jobs[job_id]["report"]:
+                                c = jobs[job_id]["report"]["ml_screenshot_divergence"]
+                                js_to_write["report"]["overall_divergence"] = a * wa + b * wb + c * wc
+                        else:
+                            js_to_write["report"]["overall_divergence"] = a * wa + b * wb
+                    elif "crawl_divergence" in jobs[job_id]["report"]:
+                        js_to_write["report"]["overall_divergence"] = jobs[job_id]["report"]["crawl_divergence"]
+
+        # wrtie object
+        jobs_lock.acquire()
+        json.dump(js_to_write, open(file, "w", encoding="utf8"), sort_keys=True, indent=4)
+        jobs_lock.release()
+    sys.stdout.flush()
+    sys.stderr.flush()
+
+def read_jobs_log():
+    global jobs_lock
+    jobs = {}
+    try:
+        jobs = {}
+        logs = get_list_of_files("jobs", ext="log.json")
+        jobs_lock.acquire()
+        for log_file in logs:
+            job_id = log_file.split("/")[1]
+            jobs[job_id] = json.load(open(log_file, "r", encoding="utf8"))
+    except Exception as e:
+        logging.error("Failed to read logs, or log non-existent:"+str(e))
+    finally:
+        if jobs_lock.locked():
+            jobs_lock.release()
+    return jobs
+
+def read_job_log(job_id):
+    """
+    Read a single log from jobs
+    :param job_id: the id requested
+    :return:
+    """
+    global jobs_lock
+    job = None
+    try:
+        log_path = os.path.join("jobs", job_id, "log.json")
+        if not os.path.exists(log_path):
+            return None
+        jobs_lock.acquire()
+        job = json.load(open(log_path, "r", encoding="utf8"))
+    except Exception as e:
+        logging.error("Failed to read logs :" + str(e))
+    finally:
+        if jobs_lock.locked():
+            jobs_lock.release()
+    return job
 
 def dsum(dicts, avg=False):
     ret = defaultdict(int)
@@ -31,8 +157,8 @@ def dstd(dicts):
     return dict(ret)
 
 
-def eprint(*args, **kwargs):
-    print(*args, file=sys.stderr, **kwargs)
+#def eprint(*args, **kwargs):
+#    print(*args, file=sys.stderr, **kwargs)
 
 
 def get_time():
@@ -77,20 +203,18 @@ def preprocess_save_image(image):
 
 
 def save_masks(out_dir, image_filename, mask_np_arr, image_np_arr):
-    buttons = mask_np_arr[:, :, 0]
+    """buttons = mask_np_arr[:, :, 0]
     forms = mask_np_arr[:, :, 1]
     images = mask_np_arr[:, :, 2]
     section = mask_np_arr[:, :, 3]
-    textblock = mask_np_arr[:, :, 4]
-    Image.fromarray(preprocess_save_image(image_np_arr * buttons)).save(
-        os.path.join(out_dir, "buttons_" + image_filename))
-    Image.fromarray(preprocess_save_image(image_np_arr * forms)).save(os.path.join(out_dir, "forms_" + image_filename))
-    Image.fromarray(preprocess_save_image(image_np_arr * images)).save(
-        os.path.join(out_dir, "images_" + image_filename))
-    Image.fromarray(preprocess_save_image(image_np_arr * section)).save(
-        os.path.join(out_dir, "section_" + image_filename))
-    Image.fromarray(preprocess_save_image(image_np_arr * textblock)).save(
-        os.path.join(out_dir, "textblock_" + image_filename))
+    textblock = mask_np_arr[:, :, 4]"""
+    images = mask_np_arr[:, :, 0]
+    textblock = mask_np_arr[:, :, 1]
+    #Image.fromarray(preprocess_save_image(image_np_arr * buttons)).save(os.path.join(out_dir, "buttons_" + image_filename))
+    #Image.fromarray(preprocess_save_image(image_np_arr * forms)).save(os.path.join(out_dir, "forms_" + image_filename))
+    Image.fromarray(preprocess_save_image(image_np_arr * images)).save(os.path.join(out_dir, "images_" + image_filename))
+    #Image.fromarray(preprocess_save_image(image_np_arr * section)).save(os.path.join(out_dir, "section_" + image_filename))
+    Image.fromarray(preprocess_save_image(image_np_arr * textblock)).save(os.path.join(out_dir, "textblock_" + image_filename))
 
 
 def check_unique_prefix(prefix, id_dict):
@@ -159,10 +283,71 @@ def match_images(arr1, arr2, step):
         curr_point = next_point
     return path
 
-
 def intersection(lst1, lst2):
     return list(set(lst1) & set(lst2))
 
-
 def union(lst1, lst2):
     return list(set(lst1) | set(lst2))
+
+class TimeoutThread(Thread):
+    def __init__(self, event, check_every=30):
+        Thread.__init__(self)
+        self.stopped = event
+
+        from globals import TIMEOUT_OVERALL_SEC, TIMEOUT_AI_SEC, TIMEOUT_CRAWL_SEC
+        self.crawl_timeout = TIMEOUT_CRAWL_SEC
+        self.ml_timeout = TIMEOUT_AI_SEC
+        self.overall_timeout = TIMEOUT_OVERALL_SEC
+        self.check_every = check_every
+
+    def run(self):
+        from datetime import datetime
+        while not self.stopped.wait(self.check_every):
+            # call a function
+            tjobs = read_jobs_log()
+            for job_id in tjobs:
+                job = tjobs[job_id]
+
+                # eval ml timeout
+                if job["status"] == STATUS_CODES[6]: # running ML
+                    start_time_str = job["stats"]["ml_started_at"]
+                    if start_time_str:
+                        start_time = datetime.strptime(start_time_str, '%Y-%m-%d %H:%M:%S.%f')
+                        #print(start_time)
+                        diff = (datetime.now() - start_time).total_seconds()
+                        #print (diff)
+                        if diff > self.ml_timeout: # set status to done, and set error to timeout
+                            logging.error("TimeoutThread found a ML job with id [{}] that was started and is {:.0f}s old. Closing it with a timeout error.".format(job_id, diff))
+                            tjobs[job_id]["stats"]["finished_at"] = str(datetime.now())
+                            tjobs[job_id]["error"] = "Timed out running ML, after {:.0f} seconds.".format(diff)
+                            tjobs[job_id]["status"] = STATUS_CODES[8]
+                            update_job_log(tjobs, job_id)
+
+                # eval ml timeout
+                if job["status"] == STATUS_CODES[2]: # crawling
+                    start_time_str = job["stats"]["cr_started_at"]
+                    if start_time_str:
+                        start_time = datetime.strptime(start_time_str, '%Y-%m-%d %H:%M:%S.%f')
+                        #print(start_time)
+                        diff = (datetime.now() - start_time).total_seconds()
+                        #print (diff)
+                        if diff > self.crawl_timeout: # set status to done, and set error to timeout
+                            logging.error("TimeoutThread found a crawling job with id [{}] that was started and is {:.0f}s old. Closing it with a timeout error.".format(job_id, diff))
+                            tjobs[job_id]["stats"]["finished_at"] = str(datetime.now())
+                            tjobs[job_id]["error"] = "Timed out crawling, after {:.0f} seconds.".format(diff)
+                            tjobs[job_id]["status"] = STATUS_CODES[8]
+                            update_job_log(tjobs, job_id)
+
+                # eval overall timeout
+                if job["stats"]["finished_at"].strip() == "":
+                    start_time_str = job["stats"]["queued_at"]
+                    start_time = datetime.strptime(start_time_str, '%Y-%m-%d %H:%M:%S.%f')
+                    diff = (datetime.now() - start_time).total_seconds()
+                    if diff > self.overall_timeout:  # set status to done, and set error to timeout
+                        logging.error(
+                            "TimeoutThread found a job with id [{}] that was queued and is {:.0f}s old. Closing it with a timeout error.".format(
+                                job_id, diff))
+                        tjobs[job_id]["stats"]["finished_at"] = str(datetime.now())
+                        tjobs[job_id]["error"] = "Timed out running job, after {:.0f} seconds.".format(diff)
+                        tjobs[job_id]["status"] = STATUS_CODES[8]
+                        update_job_log(tjobs, job_id)

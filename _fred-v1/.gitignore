@@ -1,0 +1,9 @@
+.idea/
+.DS_Store
+chromedriver
+__pycache__/
+*.json
+tmp/
+*.log
+fred/inference/model_files.bz2
+fred/inference/model_files/*.pth

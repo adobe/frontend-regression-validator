@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/submit.css">
+    <title>Submit</title>
+</head>
+<body>
+<!-- Just an image -->
+<nav class="navbar navbar-expand-sm navbar-light bg-light shadow">
+    <a class="navbar-brand" href="#">
+        <img src="images/adobe_small.png" class="img-responsive">
+    </a>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link active" href="/static/submit.html">Submit<span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="/static/jobs.html">Jobs</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container h-100">
+    <div class="row h-100 justify-content-center align-items-center">
+        <div class="col">
+            <div class="alert alert-success d-none" role="alert" id="new_job_alert">
+
+            </div>
+
+            <form class="col-12">
+                <div class="form-group">
+                    <input type="url" class="form-control" id="baseline_url" placeholder="Baseline URL"
+                           required="required">
+                </div>
+                <div class="form-group">
+                    <input type="url" class="form-control" id="updated_url" placeholder="Updated URL"
+                           required="required">
+                </div>
+
+                <div class="form-group">
+                    <input type="number" class="form-control" id="max_depth" placeholder="Crawler recursion depth"
+                           required="required">
+                </div>
+
+                <div class="form-group">
+                    <input type="number" class="form-control" id="max_urls" placeholder="Max number URLs to crawler"
+                           required="required">
+                </div>
+
+                <div class="form-group">
+                    <input type="text" class="form-control" id="prefix" placeholder="Output directory prefix"
+                           required="required">
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="require_auth">
+                    <label class="form-check-label" for="require_auth">Require auth</label>
+                </div>
+
+                <div class="col text-center form-group">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+
+                <div id="auth_boxes" class="d-none">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="auth_baseline_username"
+                               placeholder="Baseline username">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="auth_baseline_password"
+                               placeholder="Baseline password">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="auth_updated_username"
+                               placeholder="Updated username">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" id="auth_updated_password"
+                               placeholder="Updated password">
+                    </div>
+                    <div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+
+<script src="js/submit.js"></script>
+</body>
+</html>

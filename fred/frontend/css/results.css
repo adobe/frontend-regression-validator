@@ -1,0 +1,18 @@
+* {
+  border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+  line-height: 1.4;
+
+}
+
+* {box-sizing: border-box;}
+
+.tooltip-inner {
+    max-width: none;
+    white-space: nowrap;
+    text-align:left;
+}
+
+.carousel-control-next, .carousel-control-prev {
+    width:40% !important;
+}

@@ -1,36 +1,58 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
+    <title>FRED - Submit new job</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/static/images/favicon/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/static/images/favicon/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/static/images/favicon/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/static/images/favicon/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="/static/images/favicon/apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="/static/images/favicon/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="/static/images/favicon/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/static/images/favicon/apple-touch-icon-152x152.png" />
+    <link rel="icon" type="image/png" href="/static/images/favicon/favicon-196x196.png" sizes="196x196" />
+    <link rel="icon" type="image/png" href="/static/images/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="/static/images/favicon/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/static/images/favicon/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" type="image/png" href="/static/images/favicon/favicon-128.png" sizes="128x128" />
+    <meta name="application-name" content="FRED"/>
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-TileImage" content="mstile-144x144.png" />
+    <meta name="msapplication-square70x70logo" content="mstile-70x70.png" />
+    <meta name="msapplication-square150x150logo" content="mstile-150x150.png" />
+    <meta name="msapplication-wide310x150logo" content="mstile-310x150.png" />
+    <meta name="msapplication-square310x310logo" content="mstile-310x310.png" />
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+
     <link rel="stylesheet" href="css/submit.css">
-    <title>Submit</title>
 </head>
 <body>
-<!-- Just an image -->
-<nav class="navbar navbar-expand-sm navbar-light bg-light shadow">
+
+<nav class="navbar navbar-expand-sm navbar-dark shadow" style="background:#000000;">
     <a class="navbar-brand" href="#">
         <img src="images/adobe_small.png" class="img-responsive">
     </a>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="/static/submit.html">Submit<span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="/static/submit.html">Submit<span class="sr-only">(current)</span></a>
             <a class="nav-item nav-link" href="/static/jobs.html">Jobs</a>
         </div>
     </div>
 </nav>
 
-<div class="container h-100">
+<div class="container h-100" style="margin-top:5rem;">
     <div class="row h-100 justify-content-center align-items-center">
         <div class="col">
-            <div class="alert alert-success d-none" role="alert" id="new_job_alert">
 
-            </div>
+            <div class="card border-primary mb-3"><div class="card-body text-primary"><strong>Submit new job:</strong></div></div>
+            <div class="alert alert-success d-none" role="alert" id="new_job_alert"></div>
 
             <form class="col-12">
                 <div class="form-group">
@@ -53,8 +75,30 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="text" class="form-control" id="prefix" placeholder="Output directory prefix"
-                           required="required">
+                    <input type="text" class="form-control" id="prefix" placeholder="[Optional] Output directory prefix"/>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" class="form-control" id="resolutions" placeholder="[Optional] Resolutions for screenshots. Fill in width with commas. Default: 512,1024"/>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" class="form-control" id="score_weights" placeholder="[Optional] Score weights. Default 0.1*network + 0.4*visual + 0.5*visual_ai. Fill in like: 0.1,0.4,0.5"/>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" class="form-control" id="score_epsilon" placeholder="[Optional] Accepted thresholds. Default 10 for network, 0 for visual and visual_ai. Fill in like: 10,0,0"/>
+                </div>
+
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="ml_enable" checked="checked">
+                    <label class="form-check-label" for="ml_enable">Enable ML component</label>
+                </div>
+
+                <div id="ml_address_boxes">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="ml_address" placeholder="Address for ML component ( example: 0.0.0.0:5000 )" value="0.0.0.0:5000"/>
+                    </div>                   
                 </div>
 
                 <div class="form-check">
@@ -82,28 +126,13 @@
                     <div class="form-group">
                         <input type="password" class="form-control" id="auth_updated_password"
                                placeholder="Updated password">
-                    </div>
-                    <div>
+                    </div>                  
+                </div>
 
             </form>
         </div>
     </div>
 </div>
-
-
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.1.1.min.js"
-        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 
 <script src="js/submit.js"></script>
 </body>
