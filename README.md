@@ -50,6 +50,7 @@ sudo apt-get install chromium-chromedriver
 then run the following:
 ```
 git clone https://github.com/adobe/frontend-regression-validator.git
+cd frontend-regression-validator
 pip install -r requirements.txt
 cd fred/ml
 cat model_files.bz2.parta* > model_files.bz2
