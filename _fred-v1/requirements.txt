@@ -2,7 +2,7 @@ torchsummary==1.5.1
 torchvision==0.4.0
 APScheduler==3.6.1
 Flask_RESTful==0.3.7
-Flask==1.1.1
+Flask
 torch==1.2.0
 Flask_Cors==3.0.8
 numpy==1.17.1

@@ -10,7 +10,7 @@ tmp/
 *.log
 fred/ml/model_files.bz2
 fred/ml/model_files/*.pth
-frontend/jobs
+fred/frontend/jobs
 log_*
 full_website_list
 
