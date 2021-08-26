@@ -41,7 +41,7 @@ We recommended running it locally instead of using the Dockerfile or to increase
 
 Ensure you have installed `chromedriver`. If you don't have it, install it on MAC with:
 ```
-brew tap homebrew/cask && brew cask install chromedriver
+brew tap homebrew/cask && brew install --cask chromedriver
 ```
 or on Linux with:
 ```
